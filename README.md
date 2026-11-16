@@ -173,7 +173,7 @@ dsh plugin --profile web add github:graydovee/dsh-remote-workspace
 The npm package installs at an exact version:
 
 ```bash
-dsh plugin --profile web add dsh-remote-workspace@0.1.0-alpha.8
+dsh plugin --profile web add dsh-remote-workspace@0.1.0-alpha.9
 ```
 
 pnpm may refuse `ssh2`'s optional native build script; let the Plugins page install it or pass
@@ -235,13 +235,14 @@ Compatibility is a **declared interval**, not a constant hidden in the code:
 | 0.1.0-alpha.6 | >= 0.2.1-rc.2 <= 0.2.2-rc.1 | 0.2.2-rc.1, 0.2.1-rc.5, 0.2.1-rc.3 |
 | 0.1.0-alpha.7 | >= 0.2.1-rc.2 <= 0.2.2-rc.1 | 0.2.2-rc.1, 0.2.1-rc.5, 0.2.1-rc.3 |
 | 0.1.0-alpha.8 | >= 0.2.1-rc.2 <= 0.2.2-rc.1 | 0.2.2-rc.1, 0.2.1-rc.5, 0.2.1-rc.3 |
+| 0.1.0-alpha.9 | >= 0.2.1-rc.2 <= 0.2.2-rc.3 | 0.2.2-rc.3, 0.2.2-rc.1, 0.2.1-rc.5, 0.2.1-rc.3 |
 <!-- verified-runtimes:end -->
 
 The table is generated from [`compat/runtimes.json`](compat/runtimes.json) by
 `node scripts/sync-compat.mjs`; `--check` fails the release when the manifest, the peers, the READMEs or
 the generated table disagree. Three different version numbers appear on purpose:
 
-- **Plugin version** (`0.1.0-alpha.8`) names our packages; it moves on our schedule.
+- **Plugin version** (`0.1.0-alpha.9`) names our packages; it moves on our schedule.
 - **DSH interval** (`min … max`, both ends inclusive) says which DSH releases this build can drive. DSH is
   a developer preview, so a release *above* the upper bound can break exactly like one below the lower
   bound: the check is a closed interval, not "this version or newer". An interval of one release is
@@ -327,7 +328,7 @@ credential store.
 
 | Symptom | What to check |
 | --- | --- |
-| `incompatible-version` | Install a DSH release inside the supported interval (`0.2.1-rc.2 … 0.2.2-rc.1`) locally, or exempt that exact pair (see Compatibility). |
+| `incompatible-version` | Install a DSH release inside the supported interval (`0.2.1-rc.2 … 0.2.2-rc.3`) locally, or exempt that exact pair (see Compatibility). |
 | `ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED` | Install the release tarball or the Git branch; both use the committed `lib/` directly. |
 | Enabling reports `dsh: warning: 2 entries did not activate` (`session-controller` / `tool-agent-team`) | Add `dsh-remote-workspace` to `dsh.profile.bundles` in the profile `package.json`, then restart DSH. |
 | No **Remote connections** row | The plugin must be installed and enabled in `web`; restart `dsh web` and reload. The row sits at the bottom of the left navigation list, just above *More*. |

@@ -425,7 +425,7 @@ start    ── reuse 用 `PATH="<nodeDir>:<launcherDir>:$PATH" exec <launcher> 
 - 官方 `cordis.patch.yml` 已有行一条不动（新增行只允许 additive，本轮连新增都不需要）。
 - 官方行层 vendored 代码：不动（重命名工作区靠改译文/回调，不靠改组件）。
 - 全局服务：不替换（`sessionPersistence` 的 provide 是既有文档化偏差 d13，本轮不扩大）。
-- 不新增 npm 依赖（不引入 `semver`；`zod` 继续钉 `4.4.3`）。
+- 不新增 npm 依赖（不引入 `semver`；`zod` 继续钉 `4.6.6`）。
 
 ### 3.9 `realm-unavailable` 守卫（本轮新增，alpha54 安全事故的防线）
 

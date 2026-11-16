@@ -140,9 +140,10 @@ server 端可以是 POSIX（linux/darwin）或 **Windows**。方言由远端探�
   `too-new` 建议升级插件，`too-old` 建议升级 server 的 dsh。
 - `compat/history.json` 记录每个已发布插件版本的区间，发新版时追加一行（`sync-compat.mjs` 校验它与
   `package.json` 版本一致）。
-- 版本号由仓库发布版本决定（当前 `0.1.0-alpha.8`）。内置 server 插件 tarball 的版本必须与它精确一致。
+- 版本号由仓库发布版本决定（当前 `0.1.0-alpha.9`）。内置 server 插件 tarball 的版本必须与它精确一致。
   本机调试可用修订后缀，部署后 `git checkout -- package.json`，修订号不进提交、不上发布。
-- zod 固定 `4.4.3`，`engines.node` 保持 `^22.19.0 || >=24.0.0`。
+- zod 固定 `4.6.6`（`0.2.2-rc.2` 起 dsh 包用它，`dsh-storage-domain` 的 domain schema 类型按这个版本
+  检查），`engines.node` 保持 `^22.19.0 || >=24.0.0`。
 
 ### 发新版的流程
 
@@ -337,6 +338,9 @@ server 端可以是 POSIX（linux/darwin）或 **Windows**。方言由远端探�
   + `release.yml` 与 `graydovee/dsh-remote-workspace-server` + `npm-release.yml`，workflow 保留
   `id-token: write` 并删掉 setup-node 生成的 `_authToken` 占位（workflow 里已有该步骤）。
   仓库不配置 npm token secret。版本必须等于 tag（去掉 `v`），已存在的版本不覆盖。
+- 发到哪个 npm dist-tag 由 workflow 判定：包还没有 stable 版本时，prerelease 直接发到 `latest`
+  （装裸包名解析 `latest`；移动 dist-tag 需要 OIDC 之外的权限，本仓库不保留 token）；出现第一个 stable
+  版本后，prerelease 回到派生 tag（`alpha`），`latest` 留在 stable 线上。
 - client release 在发布前跑 `node scripts/sync-compat.mjs --check`，并上传 `runtime-compat.json` 快照。
 - runtime 包（node+dsh）在 server 仓按 `runtime-compat.json` 的矩阵发布（当前 linux-x64-gnu、
   linux-arm64-gnu、darwin-x64、darwin-arm64；win32-x64/arm64 尚未进 CI 矩阵，但客户端可用

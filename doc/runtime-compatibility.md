@@ -12,9 +12,10 @@ one-sided rule ("this version or newer") is therefore wrong, and an exact-equali
 ```json
 {
   "schema": 2,
-  "plugin": "0.1.0-alpha.6",
-  "dsh": { "min": "0.2.1-rc.2", "max": "0.2.2-rc.1" },
+  "plugin": "0.1.0-alpha.9",
+  "dsh": { "min": "0.2.1-rc.2", "max": "0.2.2-rc.3" },
   "runtimes": [
+    { "dsh": "0.2.2-rc.3", "platforms": ["linux-x64-gnu", "linux-arm64-gnu", "darwin-x64", "darwin-arm64", "win32-x64"] },
     { "dsh": "0.2.2-rc.1", "platforms": ["linux-x64-gnu", "linux-arm64-gnu", "darwin-x64", "darwin-arm64", "win32-x64"] },
     { "dsh": "0.2.1-rc.5", "platforms": ["linux-x64-gnu", "linux-arm64-gnu", "darwin-x64", "darwin-arm64", "win32-x64"] },
     { "dsh": "0.2.1-rc.3", "platforms": ["linux-x64-gnu", "linux-arm64-gnu", "darwin-x64", "darwin-arm64", "win32-x64"] }
@@ -32,6 +33,20 @@ vitest suite, including the profile-service and provision integration tests) run
 runtime in the interval because `devDependencies` pin it exactly. A real-machine run on that newest release is
 still required before a release page calls it verified — the last full Windows/real-host run was on
 `0.2.1-rc.3`, so a newer release stays in the interval but is marked as such in the release notes.
+
+Verification record — `0.2.2-rc.3` (plugin `0.1.0-alpha.9`):
+
+- automatic: `pnpm typecheck`, `pnpm test`, `pnpm build` on the pinned `0.2.2-rc.3` packages. Supporting
+  rc.3 required moving the `zod` pin from `4.4.3` to `4.6.6`: rc.2 changed the zod build the dsh packages
+  ship, and `dsh-storage-domain` types its domain schemas with that copy, so the old pin fails `tsc` with
+  `ZodObject` not assignable to `ZodType`;
+- server: the rebuilt server plugin passes `pnpm typecheck`, `pnpm test`, `pnpm build` and
+  `pnpm pack:server-plugin` on the same `0.2.2-rc.3` pins, and the client bundles that exact tarball;
+- clean `DSH_HOME` install of the packed client, booted with the desktop `dsh` 0.2.2-rc.3 CLI: the profile
+  loads the bundle, `dsh web` starts, the page lists `dsh-remote-workspace/client.js`, and
+  `POST /dsh-remote-workspace/api/*` reaches the plugin handler;
+- still open: a real SSH-host run on `0.2.2-rc.3` (POSIX and Windows) and a browser pass over the portal;
+  the release notes must say so rather than call the pair verified.
 
 Verification record — `0.2.2-rc.1` (plugin `0.1.0-alpha.6`):
 
